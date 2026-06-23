@@ -8,6 +8,7 @@ import PlaceholderPage from "./routes/PlaceholderPage";
 import ProjectLayout from "./routes/ProjectLayout";
 import TeamsSection from "@/features/projects/teams/teams-section";
 import FilesSection from "@/features/projects/files/FilesSection";
+import TasksPage from "./routes/TasksPage";
 
 export const router = createBrowserRouter([
   { path: "/", element: <Navigate to="/projects" replace /> },
@@ -24,7 +25,7 @@ export const router = createBrowserRouter([
       { path: "files", element: <FilesSection /> },
     ],
   },
-  { path: "/tasks", element: <PlaceholderPage title="Tasks" /> },
+  { path: "/tasks", element: <TasksPage /> },
   { path: "/chats", element: <PlaceholderPage title="Chats" /> },
   { path: "/meetings", element: <PlaceholderPage title="Meetings" /> },
   { path: "/reports", element: <PlaceholderPage title="Reports" /> },
