@@ -6,6 +6,7 @@ import DashboardPage from "./routes/DashboardPage";
 import PlaceholderPage from "./routes/PlaceholderPage";
 import ProjectLayout from "./routes/ProjectLayout";
 import TeamsSection from "@/features/projects/teams/teams-section";
+import FilesSection from "@/features/projects/files/FilesSection";
 export const router = createBrowserRouter([
   { path: "/", element: <Navigate to="/projects" replace /> },
   { path: "/dashboard", element: <DashboardPage /> },
@@ -21,7 +22,7 @@ export const router = createBrowserRouter([
       { path: "overview", element: <ProjectTabPlaceholder title="Overview" /> },
       { path: "tasks", element: <KanbanBoard /> },
       { path: "teams", element: <TeamsSection /> },
-      { path: "files", element: <ProjectTabPlaceholder title="Files" /> },
+      { path: "files", element: <FilesSection /> },
     ],
   },
   { path: "/tasks", element: <PlaceholderPage title="Tasks" /> },
