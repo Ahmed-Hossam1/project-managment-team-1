@@ -6,6 +6,9 @@
 
 :root {
   --brand: #005AFB;
+  --Auth-bg: #F6F8FA;
+  --Auth-head-font-color: #000712;
+
   --text: #6b6375;
   --text-h: #08060d;
   --bg: #fff;
@@ -102,6 +105,8 @@
   --color-brand: var(--brand);
   --color-text: var(--text);
   --color-text-h: var(--text-h);
+  --color-Auth-bg: var(--Auth-bg);
+  --color-Auth-head-font-color: var(--Auth-head-font-color);
   --font-heading: var(--font-sans);
   --font-sans: 'Geist Variable', sans-serif;
   --color-sidebar-ring: var(--sidebar-ring);

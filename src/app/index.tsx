@@ -9,9 +9,25 @@ import ProjectLayout from "./routes/ProjectLayout";
 import TeamsSection from "@/features/projects/teams/teams-section";
 import FilesSection from "@/features/projects/files/FilesSection";
 import TasksPage from "./routes/TasksPage";
+import MainLayout from "@/Auth/Layout/MainLayout";
+import SignIn from "@/Auth/AuthPages/SignIn";
+import SignUp from "@/Auth/AuthPages/SignUp";
+import ForgotPassword from "@/Auth/AuthPages/ForgotPassword";
+import ResetPassword from "@/Auth/AuthPages/ResetPassword";
+import VerifyEmail from "@/Auth/AuthPages/VerifyEmail";
 
 export const router = createBrowserRouter([
   { path: "/", element: <Navigate to="/projects" replace /> },
+  {
+    element: <MainLayout />,
+    children: [
+      { path: "/signin", element: <SignIn /> },
+      { path: "/signup", element: <SignUp /> },
+      { path: "/forgot-password", element: <ForgotPassword /> },
+      { path: "/reset-password", element: <ResetPassword /> },
+      { path: "/verify-email", element: <VerifyEmail /> },
+    ],
+  },
   { path: "/dashboard", element: <DashboardPage /> },
   { path: "/projects", element: <AllProjectsPage /> },
   {
