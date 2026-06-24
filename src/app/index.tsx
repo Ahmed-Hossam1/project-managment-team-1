@@ -15,6 +15,7 @@ import SignUp from "@/Auth/AuthPages/SignUp";
 import ForgotPassword from "@/Auth/AuthPages/ForgotPassword";
 import ResetPassword from "@/Auth/AuthPages/ResetPassword";
 import VerifyEmail from "@/Auth/AuthPages/VerifyEmail";
+import ReportsPage from "./routes/ReportsPage";
 
 export const router = createBrowserRouter([
   { path: "/", element: <Navigate to="/signin" replace /> },
@@ -44,6 +45,6 @@ export const router = createBrowserRouter([
   { path: "/tasks", element: <TasksPage /> },
   { path: "/chats", element: <PlaceholderPage title="Chats" /> },
   { path: "/meetings", element: <PlaceholderPage title="Meetings" /> },
-  { path: "/reports", element: <PlaceholderPage title="Reports" /> },
+  { path: "/reports", element: <ReportsPage /> },
   { path: "*", element: <PlaceholderPage title="Page not found" /> },
 ]);
