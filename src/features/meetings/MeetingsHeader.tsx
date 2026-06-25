@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Plus } from "lucide-react"; 
+import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import NewMeetingModal from ".././MeetingsPage/NewMeetingModal";
+import NewMeetingModal from "./NewMeetingModal";
 
 export default function MeetingsHeader() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -20,9 +20,9 @@ export default function MeetingsHeader() {
         Add Meeting <Plus size={16} />
       </Button>
 
-      <NewMeetingModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
+      <NewMeetingModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
       />
     </div>
   );

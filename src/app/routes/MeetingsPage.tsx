@@ -1,9 +1,9 @@
 import DashboardLayout from "@/components/layout/dashboard-layout";
-import MeetingsHeader from "@/features/MeetingsPage/MeetingsHeader";
-import MonthFilter from "@/features/MeetingsPage//MonthFilter";
-import CalendarHeader from "@/features/MeetingsPage//CalendarHeader";
-import CalendarGrid from "@/features/MeetingsPage/CalendarGrid";
-import { MOCK_MEETINGS } from "@/features/MeetingsPage/Data/mockMeetings";
+import MeetingsHeader from "@/features/meetings/MeetingsHeader";
+import MonthFilter from "@/features/meetings/MonthFilter";
+import CalendarHeader from "@/features/meetings/CalendarHeader";
+import CalendarGrid from "@/features/meetings/CalendarGrid";
+import { MOCK_MEETINGS } from "@/features/meetings/data/mockMeetings";
 
 export default function MeetingsPage() {
   return (
