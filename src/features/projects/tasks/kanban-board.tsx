@@ -2,7 +2,9 @@ import { MoreVertical, Plus } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import TaskCard from "./task-card";
-import { columns, type ColumnId } from "./data/data";
+import { columns, type ColumnId, type Priority, type Task } from "./data/data";
+import { useTasks } from "./hooks/useTasks";
+import type { ApiTask, TaskPriority, TaskStatus } from "./types/tasks";
 
 const headerStyles: Record<ColumnId, { bg: string; dot: string }> = {
   todo: { bg: "bg-white", dot: "bg-slate-400" },
@@ -11,11 +13,74 @@ const headerStyles: Record<ColumnId, { bg: string; dot: string }> = {
   completed: { bg: "bg-green-50", dot: "bg-green-500" },
 };
 
+// API status → board column id
+const statusToColumn: Record<TaskStatus, ColumnId> = {
+  pending: "todo",
+  in_progress: "in-progress",
+  in_review: "in-review",
+  completed: "completed",
+};
+
+// API priority → UI priority badge (no "critical" in the UI → treat as High)
+const priorityMap: Record<TaskPriority, Priority> = {
+  low: "Low",
+  medium: "Medium",
+  high: "High",
+  critical: "High",
+};
+
+// Convert one API task into the shape TaskCard expects.
+function mapApiTask(task: ApiTask): Task {
+  return {
+    id: String(task.id),
+    title: task.title,
+    description: task.description ?? "",
+    priority: priorityMap[task.priority],
+    comments: 0, // API has no comment count yet
+    date: task.due_date
+      ? new Date(task.due_date).toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+        })
+      : "—",
+    avatars: task.assignees.map(
+      (a) => `https://i.pravatar.cc/64?u=${encodeURIComponent(a.email)}`,
+    ),
+    progress: task.status === "in_progress" ? task.progress : undefined,
+  };
+}
+
 export default function KanbanBoard() {
+  const { data, isPending, isError, error } = useTasks();
+
+  if (isPending) {
+    return <p className="p-4 text-sm text-muted-foreground">Loading tasks…</p>;
+  }
+
+  if (isError) {
+    return (
+      <p className="p-4 text-sm text-red-600">
+        Failed to load tasks: {error.message}
+      </p>
+    );
+  }
+
+  // Group fetched tasks into their columns.
+  const tasksByColumn: Record<ColumnId, Task[]> = {
+    todo: [],
+    "in-progress": [],
+    "in-review": [],
+    completed: [],
+  };
+  for (const apiTask of data.data) {
+    tasksByColumn[statusToColumn[apiTask.status]].push(mapApiTask(apiTask));
+  }
+
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
       {columns.map((column) => {
         const style = headerStyles[column.id];
+        const tasks = tasksByColumn[column.id];
         return (
           <div
             key={column.id}
@@ -44,7 +109,7 @@ export default function KanbanBoard() {
                 <Plus className="size-4" />
               </button>
 
-              {column.tasks.map((task) => (
+              {tasks.map((task) => (
                 <TaskCard key={task.id} task={task} />
               ))}
             </div>
