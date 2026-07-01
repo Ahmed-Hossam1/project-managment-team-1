@@ -1,11 +1,11 @@
 import { MoreVertical } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import AddTask from "./AddTask";
-import TaskCard from "../task-card";
-import type { ColumnId } from "../data/data";
-import type { ApiTask } from "../types/tasks";
-import { columnToStatus } from "../utils/task-mapper";
+import AddTask from "../Task/AddTask";
+import TaskCard from "./TaskCard";
+import type { ColumnId } from "../../data/data";
+import type { ApiTask } from "../../types/tasks";
+import { columnToStatus } from "../../utils/task-mapper";
 
 const headerStyles: Record<ColumnId, { bg: string; dot: string }> = {
   todo: { bg: "bg-white", dot: "bg-slate-400" },
@@ -18,9 +18,17 @@ interface KanbanColumnProps {
   id: ColumnId;
   title: string;
   tasks: ApiTask[];
+  /** Show the per-column "Add Task" button. Off on the cross-project page,
+   *  which has no project context to create a task in. */
+  showAdd?: boolean;
 }
 
-export default function KanbanColumn({ id, title, tasks }: KanbanColumnProps) {
+export default function KanbanColumn({
+  id,
+  title,
+  tasks,
+  showAdd = true,
+}: KanbanColumnProps) {
   const style = headerStyles[id];
 
   return (
@@ -38,7 +46,7 @@ export default function KanbanColumn({ id, title, tasks }: KanbanColumnProps) {
       </div>
 
       <div className="flex flex-col gap-3 p-4">
-        <AddTask status={columnToStatus[id]} />
+        {showAdd && <AddTask status={columnToStatus[id]} />}
 
         {tasks.map((task) => (
           <TaskCard key={task.id} task={task} />
