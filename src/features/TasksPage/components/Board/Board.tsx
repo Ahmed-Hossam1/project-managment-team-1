@@ -1,18 +1,22 @@
 import KanbanColumn from "./KanbanColumn";
 import { SkeletonCard } from "./SkeletonCard";
 import { columns } from "../../data/data";
-import { useTasks } from "../../hooks/useTasks";
 import { groupTasksByColumn } from "../../utils/task-mapper";
+import type { ApiTask } from "../../types/tasks";
+
+interface BoardProps {
+  tasks: ApiTask[];
+  isPending: boolean;
+  isError: boolean;
+  error: Error | null;
+}
 
 /**
  * Cross-project task board for the standalone /tasks page.
- * Fetches every task and groups it into the status columns.
- * (The project-scoped board lives in features/projects/tasks and reuses
- *  the same KanbanColumn + hooks, just filtered to one project.)
+ * Receives tasks (already filtered) from the parent TasksPage and groups
+ * them into the status columns.
  */
-export function Board() {
-  const { data, isPending, isError, error } = useTasks();
-
+export function Board({ tasks, isPending, isError, error }: BoardProps) {
   if (isPending) {
     return (
       <section className="grid gap-6 grid-cols-1 md:grid-cols-2 xl:grid-cols-4">
@@ -26,12 +30,12 @@ export function Board() {
   if (isError) {
     return (
       <p className="p-4 text-sm text-red-600">
-        Failed to load tasks: {error.message}
+        Failed to load tasks: {error?.message}
       </p>
     );
   }
 
-  const tasksByColumn = groupTasksByColumn(data.data);
+  const tasksByColumn = groupTasksByColumn(tasks);
 
   return (
     <section className="grid gap-6 grid-cols-1 md:grid-cols-2 xl:grid-cols-4">
@@ -47,3 +51,4 @@ export function Board() {
     </section>
   );
 }
+

@@ -32,7 +32,7 @@ export default function KanbanColumn({
   const style = headerStyles[id];
 
   return (
-    <div className="flex flex-col overflow-hidden rounded-xl bg-white ring-1 ring-slate-200/70">
+    <div className="flex flex-col overflow-hidden rounded-xl bg-white ring-1 ring-slate-200/70 overflow-y-scroll max-h-[calc(100vh-11rem)]">
       <div
         className={cn("flex items-center justify-between px-4 py-3", style.bg)}
       >

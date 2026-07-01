@@ -9,11 +9,11 @@ import {
 export function TaskFilterSelect() {
     return (
         <Select>
-            <SelectTrigger className="w-40">
+            <SelectTrigger className="w-full min-w-[10rem] sm:w-40">
                 <SelectValue placeholder="My Task" />
             </SelectTrigger>
 
-            <SelectContent>
+            <SelectContent className="max-h-60 overflow-y-auto">
                 <SelectItem value="all">
                     All Tasks
                 </SelectItem>

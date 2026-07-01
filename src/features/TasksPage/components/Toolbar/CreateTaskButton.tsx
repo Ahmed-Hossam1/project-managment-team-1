@@ -1,10 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import AddTask from "../Task/AddTask";
+import AddTask, { type ProjectOption } from "../Task/AddTask";
 
-export function CreateTaskButton() {
+interface CreateTaskButtonProps {
+  projects?: ProjectOption[];
+}
+
+export function CreateTaskButton({ projects }: CreateTaskButtonProps) {
   return (
     <AddTask
+      projects={projects}
       trigger={
         <Button size="lg" variant="brand" className="rounded-full cursor-pointer">
           Create Task
