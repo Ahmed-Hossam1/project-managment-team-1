@@ -1,4 +1,4 @@
-import { getDashboardStats } from "@/features/api/DashboardStats";
+import { getDashboardStats } from "@/features/Dashboard/api/DashboardStats";
 import { useQuery } from "@tanstack/react-query";
 export const useDashboardStats = () => {
   return useQuery({

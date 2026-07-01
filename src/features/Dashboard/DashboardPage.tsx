@@ -5,10 +5,11 @@ import { statistics } from "./Data/DashboardData";
 import DashboardTasks from "./DashboardTasks";
 import DashboardFiles from "./DashboardFiles";
 import DashboardActiveProjects from "./DashboardActiveFiles";
-import DashboardProgresses from "./DashboardProgresses";
+import DashboardProgresses from "./DashboardTeams";
 import DashboardEvents from "./DashboardEvents";
 import AskAi from "./AskAi";
 import { useDashboardStats } from "@/features/Dashboard/hooks/UseDashboardStats";
+import DashboardTeams from "./DashboardTeams";
 
 export default function DashboardPage() {
   const { data, isPending, error } = useDashboardStats();
@@ -80,7 +81,7 @@ export default function DashboardPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4 mt-7 w-full">
         <DashboardTasks />
-        <DashboardProgresses />
+        <DashboardTeams />
         <DashboardEvents />
         <AskAi />
       </div>
