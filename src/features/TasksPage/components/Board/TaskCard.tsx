@@ -3,11 +3,11 @@ import { Calendar, MessageSquareText } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Progress } from "@/components/ui/progress";
 import AvatarGroup from "@/components/ui/avatar-group";
-import type { Priority } from "./data/data";
-import type { ApiTask } from "./types/tasks";
-import { mapApiTask } from "./utils/task-mapper";
-import EditTask from "./components/EditTask";
-import DeleteTaskDialog from "./components/DeleteTaskDialog";
+import type { Priority } from "../../data/data";
+import type { ApiTask } from "../../types/tasks";
+import { mapApiTask } from "../../utils/task-mapper";
+import EditTask from "../Task/EditTask";
+import DeleteTaskDialog from "../Task/DeleteTaskDialog";
 
 const priorityStyles: Record<Priority, string> = {
   High: "bg-red-50 text-red-500",

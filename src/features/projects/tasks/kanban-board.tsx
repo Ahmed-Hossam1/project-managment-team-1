@@ -1,9 +1,11 @@
 import { useParams } from "react-router-dom";
 
-import { columns } from "./data/data";
-import { useTasks } from "./hooks/useTasks";
-import { groupTasksByColumn } from "./utils/task-mapper";
-import KanbanColumn from "./components/KanbanColumn";
+// Shared task logic + UI now live in the canonical TasksPage feature;
+// this project board just reuses them, filtered to one project.
+import { columns } from "@/features/TasksPage/data/data";
+import { useTasks } from "@/features/TasksPage/hooks/useTasks";
+import { groupTasksByColumn } from "@/features/TasksPage/utils/task-mapper";
+import KanbanColumn from "@/features/TasksPage/components/Board/KanbanColumn";
 
 export default function KanbanBoard() {
   const { projectId } = useParams();

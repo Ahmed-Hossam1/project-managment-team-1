@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Plus, FileText, Calendar, Upload } from "lucide-react";
+import { Pencil, FileText, Calendar } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -11,72 +10,67 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import useCreateTask from "../hooks/useCreateTask";
-import type { TaskPriority, TaskStatus } from "../types/tasks";
+import { useUpdateTask } from "../../hooks/useUpdateTask";
+import type { ApiTask, TaskPriority, TaskStatus } from "../../types/tasks";
 
 type FormValues = {
   title: string;
   start_date: string;
-  description?: string;
+  description: string;
   priority: TaskPriority;
+  status: TaskStatus;
 };
 
-interface AddTaskProps {
-  status: TaskStatus; // which column this button belongs to
-}
-
-export default function AddTask({ status }: AddTaskProps) {
+export default function EditTask({ task }: { task: ApiTask }) {
   const [open, setOpen] = useState(false);
-  const { projectId } = useParams();
-  const createTask = useCreateTask();
-  const { register, handleSubmit, reset } = useForm<FormValues>({
-    defaultValues: { priority: "medium" },
+  const updateTask = useUpdateTask();
+
+  const { register, handleSubmit } = useForm<FormValues>({
+    defaultValues: {
+      title: task.title,
+      start_date: task.start_date?.slice(0, 10) ?? "",
+      description: task.description ?? "",
+      priority: task.priority,
+      status: task.status,
+    },
   });
 
   const onSubmit = (values: FormValues) => {
-    createTask.mutate(
+    updateTask.mutate(
       {
-        project_id: Number(projectId),
-        name: "hanan", // TODO: replace with logged-in user once sign-in is ready
-        title: values.title,
-        start_date: values.start_date,
-        description: values.description,
-        priority: values.priority, // chosen in the form
-        status, // taken from the column this button is in
-        user_ids: [1], // TODO: API requires ≥1 assignee; wire "Add Guests" field
-      },
-      {
-        onSuccess: () => {
-          reset();
-          setOpen(false);
-        },
-        onError: (error) => {
-          // Log the exact server response so we can see what's wrong.
-          console.error("Create task failed:", error);
-          // @ts-expect-error – axios error shape
-          console.error("Server said:", error?.response?.data);
+        id: task.id,
+        data: {
+          project_id: task.project_id,
+          title: values.title,
+          start_date: values.start_date,
+          description: values.description,
+          priority: values.priority,
+          status: values.status,
+          // keep existing assignees (API requires ≥1)
+          user_ids: task.assignees.length
+            ? task.assignees.map((a) => a.id)
+            : [1],
         },
       },
+      { onSuccess: () => setOpen(false) },
     );
   };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button
-          variant="outline"
-          size="lg"
-          className="w-full rounded-full border-dashed border-brand text-brand hover:bg-brand/5 hover:text-brand cursor-pointer"
+        <button
+          aria-label="Edit task"
+          className="text-muted-foreground hover:text-foreground"
         >
-          Add Task
-          <Plus className="size-4" />
-        </Button>
+          <Pencil className="size-3.5" />
+        </button>
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-2xl rounded-3xl p-8 border-border-secondary bg-white dark:bg-slate-950">
         <DialogHeader className="mb-6">
           <DialogTitle className="text-xl font-bold text-foreground">
-            Create Task
+            Edit Task
           </DialogTitle>
         </DialogHeader>
 
@@ -99,7 +93,7 @@ export default function AddTask({ status }: AddTaskProps) {
             </div>
           </div>
 
-          {/* Start Date & End Date */}
+          {/* Start Date & Status */}
           <div className="grid grid-cols-2 gap-4">
             <div className="relative">
               <Input
@@ -111,11 +105,18 @@ export default function AddTask({ status }: AddTaskProps) {
               <Calendar className="absolute right-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground pointer-events-none" />
             </div>
             <div className="relative">
-              <Input
-                placeholder="End Date"
-                className="h-11 pr-10 border-slate-200 dark:border-slate-800 bg-transparent rounded-xl focus-visible:ring-1 focus-visible:ring-slate-300"
-              />
-              <Calendar className="absolute right-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground pointer-events-none" />
+              <label className="absolute -top-2 left-3 bg-white dark:bg-slate-950 px-1 text-xs text-muted-foreground font-medium z-10">
+                Status
+              </label>
+              <select
+                {...register("status")}
+                className="h-11 w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-transparent px-3 text-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-slate-300"
+              >
+                <option value="pending">Pending</option>
+                <option value="in_progress">In Progress</option>
+                <option value="in_review">In Review</option>
+                <option value="completed">Completed</option>
+              </select>
             </div>
           </div>
 
@@ -149,60 +150,23 @@ export default function AddTask({ status }: AddTaskProps) {
             />
           </div>
 
-          {/* Add Guests */}
-          <div className="space-y-2">
-            <div className="relative">
-              <label className="absolute -top-2 left-3 bg-white dark:bg-slate-950 px-1 text-xs text-muted-foreground font-medium z-10">
-                Add Guests
-              </label>
-              <div className="relative flex items-center pr-1 border border-slate-200 dark:border-slate-800 rounded-xl h-11 focus-within:ring-1 focus-within:ring-slate-300">
-                <Input
-                  placeholder="@Anas Mohamed"
-                  className="border-0 focus-visible:ring-0 shadow-none h-full bg-transparent"
-                />
-                <Button
-                  type="button"
-                  size="sm"
-                  className="bg-[#18181B] dark:bg-slate-800 hover:bg-black dark:hover:bg-slate-700 text-white rounded-lg px-4 h-8 shrink-0 cursor-pointer font-medium text-xs"
-                >
-                  Add +
-                </Button>
-              </div>
-            </div>
-          </div>
-
-          {/* Add Task Files */}
-          <div className="space-y-1.5">
-            <span className="text-[11px] font-bold text-slate-550 dark:text-slate-400 uppercase tracking-wider pl-1">
-              Add Task Files
-            </span>
-            <div className="border border-dashed border-slate-200 dark:border-slate-800 rounded-xl p-8 flex flex-col items-center justify-center gap-2 bg-slate-50/20 dark:bg-slate-900/10 cursor-pointer hover:bg-slate-50/50 dark:hover:bg-slate-900/20 transition-colors">
-              <div className="size-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
-                <Upload className="size-4 text-muted-foreground" />
-              </div>
-              <p className="text-xs text-muted-foreground text-center">
-                Drag and drop files or click to upload
-              </p>
-            </div>
-          </div>
-
           {/* API error */}
-          {createTask.isError && (
+          {updateTask.isError && (
             <p className="text-sm text-red-600">
               {/* @ts-expect-error – axios error shape */}
-              {createTask.error?.response?.data?.message ??
-                "Failed to create task"}
+              {updateTask.error?.response?.data?.message ??
+                "Failed to update task"}
             </p>
           )}
 
-          {/* Create Task Submit */}
+          {/* Submit */}
           <div className="pt-2">
             <Button
               type="submit"
-              disabled={createTask.isPending}
+              disabled={updateTask.isPending}
               className="w-full h-12 bg-brand hover:bg-brand/90 text-white rounded-xl font-semibold shadow-lg shadow-brand/10 cursor-pointer disabled:opacity-60"
             >
-              {createTask.isPending ? "Creating…" : "Create Task"}
+              {updateTask.isPending ? "Saving…" : "Save Changes"}
             </Button>
           </div>
         </form>

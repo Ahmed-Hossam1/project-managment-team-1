@@ -11,8 +11,8 @@ import {
   DialogTrigger,
   DialogClose,
 } from "@/components/ui/dialog";
-import { useDeleteTask } from "../hooks/useDeleteTask";
-import type { ApiTask } from "../types/tasks";
+import { useDeleteTask } from "../../hooks/useDeleteTask";
+import type { ApiTask } from "../../types/tasks";
 
 export default function DeleteTaskDialog({ task }: { task: ApiTask }) {
   const [open, setOpen] = useState(false);
