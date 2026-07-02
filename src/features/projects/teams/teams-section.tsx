@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 
 import TeamCard from "./team-card";
+import TeamCardSkeleton from "./team-card-skeleton";
 import CreateTeam from "./components/CreateTeam";
 import { useProjectTeams } from "./hooks/useProjectTeams";
 
@@ -20,7 +21,11 @@ const TeamsSection = () => {
       </div>
 
       {isPending && (
-        <p className="p-4 text-sm text-muted-foreground">Loading teams…</p>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <TeamCardSkeleton key={i} />
+          ))}
+        </div>
       )}
 
       {isError && (

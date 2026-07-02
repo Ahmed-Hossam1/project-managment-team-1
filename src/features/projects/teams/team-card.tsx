@@ -7,6 +7,7 @@ import { useTeamMembers } from "./hooks/useTeamMembers";
 import MemberRow from "./member-row";
 import DeleteTeam from "./components/DeleteTeam";
 import AddTeamMembers from "./components/AddTeamMembers";
+import Spinner from "@/components/shared/Spinner";
 
 // The API doesn't categorize teams, so cycle a palette by position to keep
 // the cards visually distinct (matches the original UI/Front/Back/Market look).
@@ -85,9 +86,7 @@ export default function TeamCard({
       {/* members with per-person task progress */}
       <div className="divide-y divide-slate-100 px-4 pb-2">
         {isPending ? (
-          <p className="py-3 text-xs text-muted-foreground">
-            Loading members…
-          </p>
+          <Spinner className="py-3" />
         ) : members.length === 0 ? (
           <p className="py-3 text-xs text-muted-foreground">No members yet.</p>
         ) : (

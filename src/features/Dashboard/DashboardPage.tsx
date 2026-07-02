@@ -1,5 +1,6 @@
 import { ArrowUpRight, Gauge } from "lucide-react";
 import StatsCard from "@/components/shared/StatsCard";
+import Spinner from "@/components/shared/Spinner";
 import Charts from "@/components/ui/chart";
 import { statistics } from "./Data/DashboardData";
 import DashboardTasks from "./DashboardTasks";
@@ -17,7 +18,7 @@ export default function DashboardPage() {
   if (isPending) {
     return (
       <div className="container mx-auto px-4 my-6">
-        <h2>Loading...</h2>
+        <Spinner />
       </div>
     );
   }
@@ -46,7 +47,7 @@ export default function DashboardPage() {
           />
         ))}
 
-        <div className="p-4 shadow-sm text-black space-y-2 rounded-sm flex justify-between">
+        <div className="p-4 bg-white border border-gray-100 shadow-sm text-black space-y-2 rounded-lg flex justify-between">
           <div className="space-y-3">
             <h2 className="text-gray-600 font-medium">
               Completion Rate

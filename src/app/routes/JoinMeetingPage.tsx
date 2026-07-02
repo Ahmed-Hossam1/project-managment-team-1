@@ -7,6 +7,7 @@ import JoinMeetingHeader from "../../features/meetings/components/JoinMeetingHea
 import MeetingVedio from "../../features/meetings/components/MeetingVedio";
 import MeetingSummary from "../../features/meetings/components/MeetingSummary";
 import MeetingTranscripts from "../../features/meetings/components/MeetingTranscripts";
+import Spinner from "@/components/shared/Spinner";
 
 export default function JoinMeetingPage() {
   const { meetingId } = useParams();
@@ -19,7 +20,7 @@ export default function JoinMeetingPage() {
           {/* Left column: details, video, summary */}
           <div className="space-y-5">
             {isPending ? (
-              <p className="text-sm text-muted-foreground">Loading meeting…</p>
+              <Spinner />
             ) : isError ? (
               <p className="text-sm text-red-600">
                 Failed to load meeting: {error.message}
