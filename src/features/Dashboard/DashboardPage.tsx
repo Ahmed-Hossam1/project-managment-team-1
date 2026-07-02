@@ -1,6 +1,5 @@
 import { ArrowUpRight, Gauge } from "lucide-react";
 import StatsCard from "@/components/shared/StatsCard";
-import Spinner from "@/components/shared/Spinner";
 import Charts from "@/components/ui/chart";
 import { statistics } from "./Data/DashboardData";
 import DashboardTasks from "./DashboardTasks";

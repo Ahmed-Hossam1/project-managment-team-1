@@ -70,7 +70,7 @@ export default function AskAi() {
       )}
 
       {data && (
-        <div className="mt-4 rounded-md bg-gray-100 p-3">
+        <div className="mt-4 rounded-md bg-gray-100 p-3 overflow-y-scroll max-h-20 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
           <h3 className="font-semibold mb-2">AI Answer</h3>
           <p className="text-sm text-gray-700">
             {data.data.answer}
