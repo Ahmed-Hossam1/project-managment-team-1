@@ -2,22 +2,36 @@ import { useForm } from "react-hook-form";
 import { FcGoogle } from "react-icons/fc";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import { registerUser } from "../Api/auth.api";
 
 function SignUp() {
   const navigate = useNavigate();
-  const token = localStorage.getItem("token")
-  if (token) {
-    navigate("/dashboard")
-  }
+  // const token = localStorage.getItem("token")
+  // if (token) {
+  //   navigate("/dashboard")
+  // }
   const {
     register,
     handleSubmit,
     formState: { errors },
+    formState,
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log(data);
-    navigate("/home");
+  const onSubmit = async (data) => {
+    try {
+      const res = await registerUser(data);
+      if (res?.data.success) {
+        toast.success("Registered successfully");
+        navigate("/signin");
+      } else {
+        toast.error(res?.data.message || "Failed");
+      }
+    } catch (error: any) {
+      const errorMessage =
+        error.response?.data?.message || "Register Failed";
+      toast.error(errorMessage);
+    }
   };
 
   return (
@@ -45,7 +59,7 @@ function SignUp() {
           <input
             type="text"
             placeholder="Full Name"
-            {...register("fullName", {
+            {...register("name", {
               required: "Full name is required",
               minLength: {
                 value: 3,
@@ -103,6 +117,23 @@ function SignUp() {
             </p>
           )}
         </div>
+        {/* Password */}
+        <div className="h-12">
+          <input
+            type="password"
+            placeholder="Confirm Password"
+            {...register("password_confirmation", {
+              required: "confirm Password is required",
+            })}
+            className="w-full border rounded-md p-2"
+          />
+
+          {errors.password_confirmation && (
+            <p className="text-red-500 items-center text-[10px] sm:text-sm md:text-md ">
+              {errors.password_confirmation.message}
+            </p>
+          )}
+        </div>
 
         {/* Remember Me */}
         <div className="flex items-center justify-between my-1">
@@ -117,12 +148,13 @@ function SignUp() {
           </div>
         </div>
 
-        <button
-          type="submit"
+        <Button
+          spinner={formState.isSubmitting}
+          disabled={formState.isSubmitting}
           className="w-full rounded-4xl bg-blue-600 text-white p-[6px] text-[11px] sm:text-sm md:text-md"
         >
           Sign Up
-        </button>
+        </Button>
       </form>
       <div className=" items-center text-center ">
         <p className="font-light text-[11px] py-2 text-gray ">Do you have an account?    <Link
