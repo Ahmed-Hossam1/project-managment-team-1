@@ -8,6 +8,10 @@ import { toast } from "sonner";
 
 function SignIn() {
   const navigate = useNavigate();
+  const token = localStorage.getItem("token")
+  if (token) {
+    navigate("/dashboard")
+  }
   const {
     register,
     handleSubmit,
